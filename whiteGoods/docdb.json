@@ -1,0 +1,35 @@
+  {
+   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+   "contentVersion": "1.0.0.0",
+   "parameters": {
+     "docdbSettings": {
+            "type": "object"
+          }
+    },
+"variables": {
+    
+    },
+"resources": [
+  {
+      "apiVersion": "2017-06-01",
+      "type": "Microsoft.Storage/storageAccounts",
+      "kind": "Storage",
+      
+      "name": "[parameters('docdbSettings').cosmosDbAccountName]",
+      "location": "[parameters('docdbSettings').location]",
+      "properties": {
+        "databaseAccountOfferType": "Standard",
+        "locations": [
+          {
+            "id": "[concat(parameters('docdbSettings').cosmosDbAccountName, '-', parameters('docdbSettings').location)]",
+            "failoverPriority": 0,
+            "locationName": "[parameters('docdbSettings').location]"
+          }
+        ]
+      },
+      "tags": {
+        "defaultExperience": "DocumentDB"
+      }
+    }
+]
+  }
