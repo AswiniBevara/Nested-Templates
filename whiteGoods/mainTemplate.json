@@ -1,0 +1,239 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clientId": {
+      "type": "string",
+      "metadata": {
+        "description":""
+      }
+    },
+    "clientSecret": {
+      "type": "string",
+      "metadata": {
+        "description":""
+      }
+    },
+    "tenantId": {
+      "type": "string",
+      "metadata": {
+        "description":""
+      }
+    },
+    "dataPacketDesignerpPackageWebZipUri": {
+      "type": "string",
+      "metadata": {
+        "description":""
+      }
+    },
+    "deviceManagementPortalPackageWebZipUri": {
+      "type": "string",
+      "metadata": {
+        "description":""
+      }
+    },
+    "iotHubName": {
+        "type": "string",
+        "metadata": {
+          "description":""
+        }
+      },
+      "cosmosDbAccountName": {
+        "type": "string",
+        "metadata": {
+          "description":""
+        }
+      },
+      "cosmosDbName": {
+        "type": "string",
+        "metadata": {
+          "description":""
+        }
+      },
+      "cosmosDBMessageCollectionName": {
+        "type": "string",
+        "metadata": {
+          "description":""
+        }
+      }
+  },
+  "variables": {
+   "iothubSettings":{
+        "iotHubName": "[concat('iothub', uniqueString(resourceGroup().id))]",
+        "iotHubSku": "S1",
+        "iotHubCapacity": "1",
+        "iotHubVersion": "2016-02-03",
+        
+        "iotHubKeyName": "iothubowner",
+        "iotHubKeyResource": "[resourceId('Microsoft.Devices/Iothubs/Iothubkeys', variables('iothubSettings').iotHubName, variables('iothubSettings').iotHubKeyName)]",
+        "suiteType": "RemoteMonitoring",
+        "location": "[resourceGroup().location]"
+      },
+ "docdbSettings":{
+    "cosmosDbAccountName": "[concat('cosmosdb', uniqueString(resourceGroup().id))]",
+    "cosmosDBResourceId": "[resourceId('Microsoft.DocumentDb/databaseAccounts', variables('docdbSettings').cosmosDbAccountName)]",
+    "cosmosDbName": "MSIoT",
+    "cosmosDbColTemplateName": "Templates",
+    "cosmosDbColMessagesName": "Messages",
+    "cosmosDbColGroupsName": "Groups"
+},
+ "notificationSettings":{
+    "notificationHubNamespaceName": "[concat('hubns', uniqueString(resourceGroup().id))]",
+    "notificationHubName": "[concat('hunname', uniqueString(resourceGroup().id))]" 
+},
+ "webappSettings":{
+    "webAppHostingPlanName": "[concat('webSite', uniqueString(resourceGroup().id))]",
+    "webAppSkuName": "F1",
+    "dataPacketWebSiteName": "[concat('datapacket', uniqueString(resourceGroup().id))]",
+    "dataPacketAppInsights": "[concat('dataPackAppInsights', uniqueString(resourceGroup().id))]",
+    "dataPacketPackageuri": "[concat(parameters('dataPacketDesignerpPackageWebZipUri'))]",
+    "deviceManagementPortalWebSiteName": "[concat('devicemanagement', uniqueString(resourceGroup().id))]",
+    "deviceManagementPortalPackageuri": "[concat(parameters('deviceManagementPortalPackageWebZipUri'))]",
+    "deviceManagementAppInsights": "[concat('devMngAppInsights', uniqueString(resourceGroup().id))]"
+},
+    
+ "streamjobSettings":{
+    "streamAnalyticsjobname": "[concat(parameters('iotHubName'), '-ASAJob')]",
+    "telemetryCGName": "telemetrycg",
+    "saVersion": "2015-10-01"
+  },
+  "location": "[resourceGroup().location]",
+  "suffix": "[substring(uniqueString(resourceGroup().id), 0, 5)]",
+  "baseUrl":"https://raw.githubusercontent.com/AswiniBevara/Nested-Templates/master/whiteGoods/"
+},
+"resources": [
+    {
+        "name": "IotHubR2",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2016-02-01",
+        "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+        "uri": "[concat(variables('baseUrl'), 'iotHub.json')]",
+        "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+        "iotHubSettings": {
+        "value": "[variables('iotHubSettings')]"
+        }
+         }
+        }
+        },
+        {
+          "name": "docdb",
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2016-02-01",
+          "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+          "uri": "[concat(variables('baseUrl'), 'docdb.json')]",
+          "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+          "iotHubSettings": {
+          "value": "[variables('docdbSettings')]"
+          }
+           }
+          }
+          },
+          {
+            "name": "notification",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-02-01",
+            "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+            "uri": "[concat(variables('baseUrl'), 'notificationhub.json')]",
+            "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+            "iotHubSettings": {
+            "value": "[variables('notificationSettings')]"
+            }
+             }
+            }
+            },
+            {
+              "name": "webapp",
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2016-02-01",
+              "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+              "uri": "[concat(variables('baseUrl'), 'webapp.json')]",
+              "contentVersion": "1.0.0.0"
+              },
+              "parameters": {
+              "webappSettings": {
+              "value": "[variables('webappSettings')]"
+              },
+              "docdbSettings": {
+                "value": "[variables('webappSettings')]"
+                },
+                "notificationSettings": {
+                  "value": "[variables('webappSettings')]"
+                  },
+                  "iotHubSettings": {
+                    "value": "[variables('webappSettings')]"
+                    }
+               }
+              }
+              },
+              {
+                "name": "streamjob",
+                "type": "Microsoft.Resources/deployments",
+                "apiVersion": "2016-02-01",
+                "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                "uri": "[concat(variables('baseUrl'), 'streamjob.json')]",
+                "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                "iotHubSettings": {
+                "value": "[variables('streamjobSettings')]"
+                },
+                "streamjobSettings": {
+                  "value": "[variables('streamjobSettings')]"
+                  },
+                  "docdbSettings": {
+                    "value": "[variables('streamjobSettings')]"
+                    }
+
+                 }
+                }
+                }
+          
+  ],
+   
+  "outputs": {
+    "dataPacketDesignerUrl": {
+      "type": "string",
+      "value": "[concat('https://', variables('webappSettings'),'.azurewebsites.net')]"
+    },
+    "deviceManagementPortalUrl": {
+      "type": "string",
+      "value": "[concat('https://', variables('webappSettings'),'.azurewebsites.net')]"
+    },
+    "iotHubName": {
+      "type": "string",
+      "value": "[variables('iothubSettings')]"
+    },
+    "cosmosDBAccountName": {
+      "type": "string",
+      "value": "[variables('docdbSettings')]"
+    },
+    "cosmosDBAccountEndPoint": {
+      "type": "string",
+      "value": "[reference(variables('docdbSettings')).documentEndpoint]"
+    },
+    "cosmosDBAccountKey": {
+      "type": "string",
+      "value": "[listkeys(variables('docdbSettings'), '2015-04-08').primaryMasterKey]"
+    },
+    "streamAnalyticsName": {
+          "type": "string",
+          "value": "[variables('streamjobSettings')]"
+        }
+  }
+}
