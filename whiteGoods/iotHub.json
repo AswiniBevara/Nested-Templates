@@ -1,0 +1,31 @@
+ 
+ {
+   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+   "contentVersion": "1.0.0.0",
+   "parameters": {
+     "iotHubSettings": {
+            "type": "object"
+          }
+    },
+"variables": {
+    
+    },
+"resources": [
+ {
+      "iotHubVersion": "[parameters('iotHubSettings').iotHubVersion]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('iotHubSettings').iotHubName]",
+      "location": "[parameters('iotHubSettings').location]",
+      "sku": {
+        "name": "[parameters('iotHubSettings').iotHubSku]",
+        "capacity": "[parameters('iotHubSettings').iotHubCapacity]"
+      },
+      "tags": {
+        "IotSuiteType": "[parameters('iotHubSettings').suiteType]"
+      },
+      "properties": {
+        "location": "[parameters('iotHubSettings').location]"
+      }
+    }
+]
+ }
