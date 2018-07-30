@@ -1,48 +1,46 @@
-   {
-   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-   "contentVersion": "1.0.0.0",
-   "parameters": {
-     "docdbSettings": {
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "docdbSettings": {
             "type": "object"
-          }
+        }
     },
-"variables": {
-    
-    },
-"resources": [
- {
-      "apiVersion": "2017-06-01",
-      "kind": "Storage",
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('docdbSettings').cosmosDbAccountName]",
-      "location": "[parameters('docdbSettings').location]",
-      "properties": {
-        "databaseAccountOfferType": "Standard",
-        "locations": [
-          {
-            "id": "[concat(parameters('docdbSettings').cosmosDbAccountName, '-', parameters('docdbSettings').location)]",
-            "failoverPriority": 0,
-            "locationName": "[parameters('docdbSettings').location]"
-          }
-        ]
-      },
-      "tags": {
-        "defaultExperience": "DocumentDB"
-      }
-    }
-],
-        "outputs": {
-        "cosmosDBAccountName":{
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2017-06-01",
+            "kind": "Storage",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('docdbSettings').cosmosDbAccountName]",
+            "location": "[parameters('docdbSettings').location]",
+            "properties": {
+                "databaseAccountOfferType": "Standard",
+                "locations": [
+                    {
+                        "id": "[concat(parameters('docdbSettings').cosmosDbAccountName, '-', parameters('docdbSettings').location)]",
+                        "failoverPriority": 0,
+                        "locationName": "[parameters('docdbSettings').location]"
+                    }
+                ]
+            },
+            "tags": {
+                "defaultExperience": "DocumentDB"
+            }
+        }
+    ],
+    "outputs": {
+        "cosmosDBAccountName": {
             "type": "string",
             "value": "[parameters('docdbSettings').cosmosDBAccountName]"
         },
-        "cosmosDBAccountEndPoint":{
+        "cosmosDBAccountEndPoint": {
             "type": "string",
             "value": "[parameters('docdbSettings').cosmosDBAccountEndPoint]"
         },
-        "cosmosDBAccountKey":{
+        "cosmosDBAccountKey": {
             "type": "string",
             "value": "[listkeys(parameters('docdbSettings'), '2015-04-08').primaryMasterKey]"
         }
     }
-   }
+}
