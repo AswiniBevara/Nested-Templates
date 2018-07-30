@@ -26,5 +26,11 @@
         "location": "[parameters('iothubSettings').location]"
       }
     }
-]
+],
+        "outputs": {
+        "iotHubName":{
+            "type": "string",
+            "value": "[parameters('iothubSettings').iotHubName]"
+        }
+    }
   }
