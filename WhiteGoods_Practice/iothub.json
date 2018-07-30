@@ -1,36 +1,34 @@
-  {
-   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-   "contentVersion": "1.0.0.0",
-   "parameters": {
-     "iothubSettings": {
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "iothubSettings": {
             "type": "object"
-          }
+        }
     },
-"variables": {
-    
-    },
-"resources": [
-  {
-      "iotHubVersion": "[parameters('iothubSettings').iotHubVersion]",
-      "type": "Microsoft.Devices/Iothubs",
-      "name": "[parameters('iothubSettings').iotHubName]",
-      "location": "[parameters('iothubSettings').location]",
-      "sku": {
-        "name": "[parameters('iotHubSettings').iotHubSku]",
-        "capacity": "[parameters('iotHubSettings').iotHubCapacity]"
-      },
-      "tags": {
-        "IotSuiteType": "[parameters('iothubSettings').suiteType]"
-      },
-      "properties": {
-        "location": "[parameters('iothubSettings').location]"
-      }
-    }
-],
-        "outputs": {
-        "iotHubName":{
+    "variables": {},
+    "resources": [
+        {
+            "iotHubVersion": "[parameters('iothubSettings').iotHubVersion]",
+            "type": "Microsoft.Devices/Iothubs",
+            "name": "[parameters('iothubSettings').iotHubName]",
+            "location": "[parameters('iothubSettings').location]",
+            "sku": {
+                "name": "[parameters('iotHubSettings').iotHubSku]",
+                "capacity": "[parameters('iotHubSettings').iotHubCapacity]"
+            },
+            "tags": {
+                "IotSuiteType": "[parameters('iothubSettings').suiteType]"
+            },
+            "properties": {
+                "location": "[parameters('iothubSettings').location]"
+            }
+        }
+    ],
+    "outputs": {
+        "iotHubName": {
             "type": "string",
             "value": "[parameters('iothubSettings').iotHubName]"
         }
     }
-  }
+}
