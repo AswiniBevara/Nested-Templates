@@ -1,63 +1,61 @@
-  {
-   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-   "contentVersion": "1.0.0.0",
-   "parameters": {
-     "streamjobSettings": {
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "streamjobSettings": {
             "type": "object"
-          },
-     "iothubSettings": {
-            "type": "object"
-          }
-    },
-"variables": {
-    
-    },
-"resources": [
- {
-      "apiVersion": "2016-03-01",
-      "type": "Microsoft.StreamAnalytics/streamingjobs",
-      "name": "[parameters('streamjobSettings').streamAnalyticsjobname]",
-      "location": "[parameters('streamjobSettings').location]",
-      "dependsOn": [
-      ],
-      "tags": {
-        "IotSuiteType": "[parameters('iothubSettings').suiteType]"
-      },
-      "properties": {
-        "sku": {
-          "name": "standard"
         },
-        "OutputStartMode": "JobStartTime",
-        "EventsOutOfOrderMaxDelayInSeconds": 10,
-        "EventsOutOfOrderPolicy": "adjust",
-        "Inputs": [
-          {
-            "Name": "IoTHubStream",
-            "Properties": {
-              "DataSource": {
-                "Properties": {
-                  "iotHubNamespace": "[parameters('iothubSettings').iotHubName]",
-                  "sharedAccessPolicyKey": "[listkeys(parameters('iothubSettings').iotHubKeyResource, parameters('iothubSettings').iotHubVersion).primaryKey]",
-                  "sharedAccessPolicyName": "[parameters('iothubSettings').iotHubKeyName]"
-                },
-                "Type": "Microsoft.Devices/IotHubs"
-              },
-              "Serialization": {
-                "Properties": {
-                  "Encoding": "UTF8"
-                },
-                "Type": "Json"
-              },
-              "Type": "Stream"
-            }
-  
+        "iothubSettings": {
+            "type": "object"
         }
-
-        ]
-  
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2016-03-01",
+            "type": "Microsoft.StreamAnalytics/streamingjobs",
+            "name": "[parameters('streamjobSettings').streamAnalyticsjobname]",
+            "location": "[parameters('streamjobSettings').location]",
+            "dependsOn": [],
+            "tags": {
+                "IotSuiteType": "[parameters('iothubSettings').suiteType]"
+            },
+            "properties": {
+                "sku": {
+                    "name": "standard"
+                },
+                "OutputStartMode": "JobStartTime",
+                "EventsOutOfOrderMaxDelayInSeconds": 10,
+                "EventsOutOfOrderPolicy": "adjust",
+                "Inputs": [
+                    {
+                        "Name": "IoTHubStream",
+                        "Properties": {
+                            "DataSource": {
+                                "Properties": {
+                                    "iotHubNamespace": "[parameters('iothubSettings').iotHubName]",
+                                    "sharedAccessPolicyKey": "[listkeys(parameters('iothubSettings').iotHubKeyResource, parameters('iothubSettings').iotHubVersion).primaryKey]",
+                                    "sharedAccessPolicyName": "[parameters('iothubSettings').iotHubKeyName]"
+                                },
+                                "Type": "Microsoft.Devices/IotHubs"
+                            },
+                            "Serialization": {
+                                "Properties": {
+                                    "Encoding": "UTF8"
+                                },
+                                "Type": "Json"
+                            },
+                            "Type": "Stream"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {
+        "streamAnalyticsName": {
+            "type": "string",
+            "value": "[parameters('streamjobSettings').streamAnalyticsName]"
+        }
+    }
 }
- }
-]
-}
-  
-   
