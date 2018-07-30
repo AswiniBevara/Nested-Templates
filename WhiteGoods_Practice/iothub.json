@@ -9,13 +9,13 @@
     "variables": {},
     "resources": [
         {
-            "iotHubVersion": "[parameters('iothubSettings').iotHubVersion]",
+            "iotHubVersion": "2016-02-03",
             "type": "Microsoft.Devices/Iothubs",
             "name": "[parameters('iothubSettings').iotHubName]",
             "location": "[parameters('iothubSettings').location]",
             "sku": {
-                "name": "[parameters('iotHubSettings').iotHubSku]",
-                "capacity": "[parameters('iotHubSettings').iotHubCapacity]"
+                "name": "[parameters('iothubSettings').iotHubSku]",
+                "capacity": "[parameters('iothubSettings').iotHubCapacity]"
             },
             "tags": {
                 "IotSuiteType": "[parameters('iothubSettings').suiteType]"
