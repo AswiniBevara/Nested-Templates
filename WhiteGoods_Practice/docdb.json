@@ -30,5 +30,19 @@
         "defaultExperience": "DocumentDB"
       }
     }
-]
+],
+        "outputs": {
+        "cosmosDBAccountName":{
+            "type": "string",
+            "value": "[parameters('docdbSettings').cosmosDBAccountName]"
+        },
+        "cosmosDBAccountEndPoint":{
+            "type": "string",
+            "value": "[parameters('docdbSettings').cosmosDBAccountEndPoint]"
+        },
+        "cosmosDBAccountKey":{
+            "type": "string",
+            "value": "[listkeys(parameters('docdbSettings'), '2015-04-08').primaryMasterKey]"
+        }
+    }
    }
